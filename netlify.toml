@@ -1,0 +1,24 @@
+[build]
+  publish = "frontend/dist"
+  command = "cd frontend && npm install && npm run build && cd ../netlify/functions && npm install"
+
+[build.environment]
+  NODE_VERSION = "18"
+  PRISMA_GENERATE_NO_ENGINE = "1"
+
+# Redirect API calls to Netlify Functions
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+
+# SPA fallback
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Functions
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"

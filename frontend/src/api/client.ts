@@ -1,6 +1,9 @@
 import axios, { AxiosError } from 'axios';
 
-const API_BASE_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3000/api';
+// For Netlify, API calls go through /api/ which redirects to functions
+// For local dev, use VITE_API_URL or default to localhost:3000
+const API_BASE_URL = (import.meta as any).env?.VITE_API_URL || 
+  (window.location.hostname.includes('netlify.app') ? '/api' : 'http://localhost:3000/api');
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,

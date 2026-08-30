@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  apiKey       String   @unique @map("api_key")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  products      Product[]
+  orders        Order[]
+  deliveryRates DeliveryRate[]
+
+  @@index([email])
+  @@index([apiKey])
+  @@map("users")
+}
+
+model Product {
+  id            Int      @id @default(autoincrement())
+  userId        Int      @map("user_id")
+  name          String
+  description   String?
+  barcode       String?
+  category      String?
+  imageUrl      String?  @map("image_url")
+  costPrice     Float    @map("cost_price")
+  sellingPrice  Float    @map("selling_price")
+  stockQuantity Int      @default(0) @map("stock_quantity")
+  isOutOfStock  Boolean  @default(false) @map("is_out_of_stock")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orders Order[]
+
+  @@index([userId])
+  @@index([name])
+  @@index([userId, name])
+  @@map("products")
+}
+
+model DeliveryRate {
+  id                Int      @id @default(autoincrement())
+  userId            Int      @map("user_id")
+  wilayaCode        String   @map("wilaya_code")
+  wilayaName        String   @map("wilaya_name")
+  homeDeliveryPrice Float    @map("home_delivery_price")
+  deskDeliveryPrice Float    @map("desk_delivery_price")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, wilayaCode])
+  @@index([userId])
+  @@index([wilayaCode])
+  @@map("delivery_rates")
+}
+
+model Order {
+  id               Int      @id @default(autoincrement())
+  userId           Int      @map("user_id")
+  customerName     String   @map("customer_name")
+  customerPhone    String   @map("customer_phone")
+  wilayaCode       String   @map("wilaya_code")
+  wilayaName       String   @map("wilaya_name")
+  address          String
+  productId        Int      @map("product_id")
+  quantity         Int
+  productUnitPrice Float    @map("product_unit_price")
+  deliveryType     String   @map("delivery_type")
+  deliveryFee      Float    @map("delivery_fee")
+  totalAmount      Float    @map("total_amount")
+  status           String   @default("pending")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@index([userId])
+  @@index([status])
+  @@index([wilayaCode])
+  @@index([createdAt])
+  @@index([userId, status])
+  @@map("orders")
+}
