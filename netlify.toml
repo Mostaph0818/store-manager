@@ -1,11 +1,9 @@
 [build]
   publish = "frontend/dist"
-  command = "cd frontend && npm install && npm run build && cd ../netlify/functions && npm install && npx prisma generate"
+  command = "cd frontend && npm install && npm run build && cd ../netlify/functions && npm install"
 
 [build.environment]
   NODE_VERSION = "18"
-  PRISMA_CLI_QUERY_ENGINE_TYPE = "library"
-  PRISMA_ENGINE_TYPE = "library"
 
 # Redirect API calls to Netlify Functions
 [[redirects]]
@@ -22,5 +20,4 @@
 # Functions
 [functions]
   directory = "netlify/functions"
-  node_bundler = "nft"
-  included_files = ["node_modules/.prisma/**", "node_modules/@prisma/client/**", "prisma/schema.prisma"]
+  node_bundler = "esbuild"
