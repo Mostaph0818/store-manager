@@ -303,3 +303,5 @@ x-api-key: YOUR_API_KEY
    - استخدم Nginx مع شهادة SSL مجانية من Let's Encrypt (Certbot) أو Cloudflare.
 4. **تفعيل النسخ الاحتياطي (Backups)**:
    - قم بإعداد Cron Job يومي لعمل `pg_dump` لقاعدة البيانات.
+#   s t o r e - m a n a g e r  
+ 
