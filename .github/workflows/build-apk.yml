@@ -1,4 +1,4 @@
-name: Build Capacitor Android APK
+name: Build Android APK
 
 on:
   push:
@@ -26,19 +26,19 @@ jobs:
 
       - name: Install Frontend Dependencies
         working-directory: ./frontend
-        run: npm install
+        run: |
+          npm install
+          npm install --save-dev @capacitor/cli @capacitor/android
 
       - name: Build Web Assets
         working-directory: ./frontend
         run: npm run build
 
-      - name: Add Android Platform
+      - name: Add & Sync Capacitor Android
         working-directory: ./frontend
-        run: npx cap add android || true
-
-      - name: Sync Capacitor
-        working-directory: ./frontend
-        run: npx cap sync android
+        run: |
+          npx cap add android || true
+          npx cap sync android
 
       - name: Build Android APK with Gradle
         working-directory: ./frontend/android
