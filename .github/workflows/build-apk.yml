@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build Capacitor Android APK
 
 on:
   push:
@@ -9,9 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./frontend
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -19,19 +16,38 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
 
-      - name: Setup EAS CLI
-        uses: expo/expo-github-action@v8
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
         with:
-          eas-version: latest
-          token: ${{ secrets.EXPO_TOKEN }}
+          distribution: 'zulu'
+          java-version: '17'
 
-      - name: Install dependencies
+      - name: Install Frontend Dependencies
+        working-directory: ./frontend
         run: npm install
 
-      - name: Auto Init EAS Project
-        run: npx eas-cli init --account mostapha0818 --non-interactive || true
+      - name: Build Web Assets
+        working-directory: ./frontend
+        run: npm run build
 
-      - name: Build APK via EAS
-        run: npx eas-cli build --platform android --profile preview --non-interactive
+      - name: Add Android Platform
+        working-directory: ./frontend
+        run: npx cap add android || true
+
+      - name: Sync Capacitor
+        working-directory: ./frontend
+        run: npx cap sync android
+
+      - name: Build Android APK with Gradle
+        working-directory: ./frontend/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifacts-more@v4
+        with:
+          name: app-debug-apk
+          path: frontend/android/app/build/outputs/apk/debug/app-debug.apk
