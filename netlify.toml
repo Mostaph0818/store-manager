@@ -22,5 +22,5 @@
 # Functions
 [functions]
   directory = "netlify/functions"
-  node_bundler = "esbuild"
+  node_bundler = "nft"
   included_files = ["node_modules/.prisma/**", "node_modules/@prisma/client/**", "prisma/schema.prisma"]
