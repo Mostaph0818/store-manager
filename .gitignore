@@ -33,16 +33,18 @@ pnpm-debug.log*
 .DS_Store
 Thumbs.db
 
+# Vite cache
+.vite/
+
 # Prisma
 backend/prisma/dev.db
 backend/prisma/*.db-journal
 
-# Vite
-frontend/.vite/
+# Expo mobile app (separate repo)
+stor-maneger/
 
-# Expo
-stor-maneger/.expo/
-stor-maneger/web-build/
+# Misc config files
+eas.joson
 
 # Misc
 *.tsbuildinfo
