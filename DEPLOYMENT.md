@@ -41,8 +41,8 @@ git push -u origin main
 
 ```
 NODE_ENV=production
-DATABASE_URL=postgresql://postgres.pbtvsumntwiwtinegkuv:20070818amine..@aws-1-eu-west-1.pooler.supabase.com:6543/postgres?pgbouncer=true
-DIRECT_URL=postgresql://postgres.pbtvsumntwiwtinegkuv:20070818amine..@aws-1-eu-west-1.pooler.supabase.com:6543/postgres?pgbouncer=true
+DATABASE_URL=your-supabase-postgresql-connection-string
+DIRECT_URL=your-supabase-postgresql-connection-string
 JWT_SECRET=<اختر كلمة سر عشوائية طويلة 32+ حرف>
 JWT_EXPIRES_IN=7d
 GOOGLE_CLIENT_ID=555214512453-atinkrgrnpml40cs2kql7anl5ma5posl.apps.googleusercontent.com
