@@ -40,6 +40,16 @@ jobs:
           npx cap add android || true
           npx cap sync android
 
+      - name: Fix Kotlin Duplicate Classes
+        working-directory: ./frontend/android
+        run: |
+          echo "configurations.all {
+              resolutionStrategy {
+                  exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk7'
+                  exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
+              }
+          }" >> app/build.gradle
+
       - name: Build Android APK with Gradle
         working-directory: ./frontend/android
         run: |
